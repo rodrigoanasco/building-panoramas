@@ -1,0 +1,1 @@
+The idea of this project is to test a bit the OPENCV library and also try to program it in a new programming language like C++, not MATLAB/Python
