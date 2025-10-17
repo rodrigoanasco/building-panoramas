@@ -1,0 +1,6 @@
+build/
+opencv-4.x/
+*.o
+*.so
+*.a
+*.zip

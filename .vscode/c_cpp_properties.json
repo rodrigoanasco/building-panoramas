@@ -1,0 +1,15 @@
+{
+  "configurations": [
+    {
+      "name": "WSL",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "/usr/local/include/opencv4"
+      ],
+      "compilerPath": "/usr/bin/g++",
+      "cppStandard": "c++17",
+      "cStandard": "c17"
+    }
+  ],
+  "version": 4
+}
