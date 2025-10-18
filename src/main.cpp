@@ -51,6 +51,7 @@ int main(){
     }
     /* Step 1 ends here */
 
+    /* Step 2: FAST feature detector */
     
     
     return 0;
