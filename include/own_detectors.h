@@ -9,21 +9,16 @@ using namespace cv;
 using namespace std;
 
 
-enum Type {
+enum POLARITY {
         POS,
         NONE,
         NEG,
 };
 
-bool high_speed_test(Mat image, Point p, float threshold){
+POLARITY high_speed_test(Mat image, Point p, float threshold){
     
-    enum Type {
-        POS,
-        NONE,
-        NEG,
-    };
-
-    Type temp = NONE;
+    int bright = 0;
+    int dark = 0;
 
     /* 
     important note: image.at<float> uses rows, cols = y, x
@@ -31,18 +26,24 @@ bool high_speed_test(Mat image, Point p, float threshold){
     and the same with rows
     */
     float cenP = image.at<float>(p.y, p.x);
-    float up = image.at<float>(p.y + 3, p.x);
-    float down = image.at<float>(p.y - 3, p.x);
+    float up = image.at<float>(p.y - 3, p.x); // up is -3 because rows grow down, so if we want to go up we (-)
+    float down = image.at<float>(p.y + 3, p.x); //similar logic here
     float right = image.at<float>(p.y, p.x + 3);
     float left = image.at<float>(p.y, p.x - 3);
     
-    if (cenP > up && cenP > down && cenP > left && cenP > right)
+    if (cenP > up + threshold && 
+        cenP > down + threshold && 
+        cenP > left + threshold &&
+        cenP > right + threshold)
         temp = POS;
     
 
     
-    if (cenP < up && cenP < down && cenP < left && cenP < right)
-        temp = POS;
+    if (cenP < up - threshold &&
+        cenP < down - threshold &&
+        cenP < left - threshold && 
+        cenP < right - threshold)
+        temp = NEG;
     
     if (temp == NONE)
         return false;    
