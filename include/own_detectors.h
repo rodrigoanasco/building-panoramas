@@ -8,14 +8,14 @@
 using namespace cv;
 using namespace std;
 
-
-enum POLARITY {
-        POS,
-        NONE,
-        NEG,
+/* Using enum CLASS because else the compiler cries*/
+enum class POLARITY {
+    POS,
+    NONE,
+    NEG
 };
 
-POLARITY high_speed_test(Mat image, Point p, float threshold){
+POLARITY high_speed_test(Mat &image, Point &p, float threshold){
     
     int bright = 0;
     int dark = 0;
@@ -25,30 +25,27 @@ POLARITY high_speed_test(Mat image, Point p, float threshold){
     because cols grow from left to right like the 'x' parameter
     and the same with rows
     */
-    float cenP = image.at<float>(p.y, p.x);
+    float center_point_intensity = image.at<float>(p.y, p.x);
     float up = image.at<float>(p.y - 3, p.x); // up is -3 because rows grow down, so if we want to go up we (-)
     float down = image.at<float>(p.y + 3, p.x); //similar logic here
     float right = image.at<float>(p.y, p.x + 3);
     float left = image.at<float>(p.y, p.x - 3);
     
-    if (cenP > up + threshold && 
-        cenP > down + threshold && 
-        cenP > left + threshold &&
-        cenP > right + threshold)
-        temp = POS;
-    
+    if (up > center_point_intensity + threshold) bright++; 
+    if (down > center_point_intensity  + threshold) bright++;
+    if (left > center_point_intensity + threshold) bright++;
+    if (right > center_point_intensity + threshold) bright++;
 
+    if (up < center_point_intensity - threshold) dark++; 
+    if (down < center_point_intensity - threshold) dark++;
+    if (left < center_point_intensity - threshold) dark++;
+    if (right < center_point_intensity - threshold) dark++;
     
-    if (cenP < up - threshold &&
-        cenP < down - threshold &&
-        cenP < left - threshold && 
-        cenP < right - threshold)
-        temp = NEG;
-    
-    if (temp == NONE)
-        return false;    
-   
-    return true; 
+    /* since the polarity is now an enum class, it needs to be called like this */
+    if (bright >= 3) return POLARITY::POS;    
+    if (dark >= 3) return POLARITY::NEG;
+
+    return POLARITY::NONE; 
 };
 
 vector<KeyPoint> my_fast_detector(const Mat image){
