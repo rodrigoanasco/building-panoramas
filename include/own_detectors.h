@@ -95,6 +95,19 @@ vector<KeyPoint> my_fast_detector(const Mat image){
     */
 
 
+    /* 
+    Analyze this part properly, because my idea right now is just to make another matrix with a value true or false
+    and then another loop to check it but this might be wrong, hence I should find another way of doing it.
+
+    I have to check if the brighter or darker points go in the same resulting matrix, if so, I can just process everything
+    and put it in the same matrix and its fine
+    */
+    for(int i = 3; i < image.rows - 3; i++){
+        for(int j = 3; j < image.cols - 3; j++){
+            //Here goes all the logic
+        }
+    }
+
 
     return;
 }
