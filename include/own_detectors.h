@@ -159,7 +159,7 @@ vector<KeyPoint> my_fast_detector(const Mat image){
             else if (temp == POLARITY::NEG){
                 bool state = is_darker(input, current, threshold, offsets);
                 if (state == true){
-                    result.push_back(KeyPoint(Point2f(current), 7.0f));
+                    result.push_back(KeyPoint(Point2f(current.x - 3, current.y - 3), 7.0f));
                 }
             }
         }
