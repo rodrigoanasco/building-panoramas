@@ -53,10 +53,12 @@ int main(){
         // Now to overlay it, we can simply use the function:
         Mat fast_img;
         // parameters: image, keypoints, output, points_color, if you want to draw the points over the image
-        drawKeypoints(images[i], kps, fast_img, Scalar(0, 255, 0), DrawMatchesFlags::DRAW_OVER_OUTIMG);
+        // NOTE: 'DRAW_OVER_OUTIM' was giving me an error because it overwrites the image that was contained already in "fast_img"
+        // However, since fast_img is empty rn, it gives an error. Be careful about this (changed it to default that actually creates a new image with the points)
+        drawKeypoints(images[i], kps, fast_img, Scalar(0, 255, 0), DrawMatchesFlags::DEFAULT);
         
         imshow(paths[i], fast_img);
-        
+
         waitKey(0);
         destroyAllWindows();
     }
