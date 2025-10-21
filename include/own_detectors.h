@@ -48,12 +48,33 @@ POLARITY high_speed_test(Mat &image, Point &p, float threshold){
     return POLARITY::NONE; 
 };
 
+/* 
+So, in my previous test, I made the error of just running the code once per each index (i < 16), this is not correct because
+if we start at index 0, and from the index 13 until index 9 all of the pixels are brighter, it wont be taken into consideration
+because it will end whenever it reaches index 15
+*/
 bool is_brighter(const Mat &image, const Point &p, float threshold, const Point *offsets){
     int temp = 0;
     float cvalue = image.at<float>(p.y, p.x);
 
-    for (int i = 0; i < 16; i++){
-        if (cvalue + threshold < image.at<float>(p + offsets[i])){
+    for (int i = 0; i < 32; i++){
+        if (cvalue + threshold < image.at<float>(p + offsets[i % 16])){
+            temp++;
+        }
+        else{
+            temp = 0;
+        }
+        if(temp >= 12) 
+            return true;
+    } 
+    return false;
+}
+bool is_darker(const Mat &image, const Point &p, float threshold, const Point *offsets){
+    int temp = 0;
+    float cvalue = image.at<float>(p.y, p.x);
+
+    for (int i = 0; i < 32; i++){
+        if (cvalue - threshold > image.at<float>(p + offsets[i % 16])){
             temp++;
         }
         else{
