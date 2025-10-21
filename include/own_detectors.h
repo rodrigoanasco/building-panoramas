@@ -89,11 +89,15 @@ bool is_darker(const Mat &image, const Point &p, float threshold, const Point *o
 
 vector<KeyPoint> my_fast_detector(const Mat image){
     
-
     /* first get the image and since it's normalized from input, we wont have to do it again*/
+    Mat gray;
+    if (image.channels() == 3) 
+        cvtColor(image, gray, COLOR_BGR2GRAY);
+    else gray = image;
+    
     Mat input;
-    cvtColor(image, input, COLOR_BGR2GRAY);
-    input.convertTo(input, CV_32F, 1.0/255.0);
+    if (gray.type() != CV_32F) gray.convertTo(input, CV_32F, 1.0/255.0);
+    else input = gray;
 
     /* now start with the padding */
     copyMakeBorder(input, input, 3, 3, 3, 3, BORDER_REFLECT_101);
@@ -160,6 +164,7 @@ vector<KeyPoint> my_fast_detector(const Mat image){
                 bool state = is_darker(input, current, threshold, offsets);
                 if (state == true){
                     result.push_back(KeyPoint(Point2f(current.x - 3, current.y - 3), 7.0f));
+                    
                 }
             }
         }
