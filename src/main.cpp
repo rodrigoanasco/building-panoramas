@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <opencv2/opencv.hpp>
-
+#include <own_detectors.h>
 
 using namespace std;
 using namespace cv;
@@ -40,18 +40,28 @@ int main(){
             cerr << "Failed to read path number: " << i << endl; 
             continue;
         }
-        img.convertTo(img, CV_32F, 1.0/255.0);
         images.push_back(img);
-    }
 
+        
+    }
     for(int i = 0; i < images.size(); i++){
         imshow(paths[i], images[i]);
+        
+        /* Step 2: FAST feature detector */
+        /* since the function is already created in "own_functions.h" just call it*/
+        vector<KeyPoint> kps = my_fast_detector(images[i]);
+        // Now to overlay it, we can simply use the function:
+        Mat fast_img;
+        // parameters: image, keypoints, output, points_color, if you want to draw the points over the image
+        drawKeypoints(images[i], kps, fast_img, Scalar(0, 255, 0), DrawMatchesFlags::DRAW_OVER_OUTIMG);
+        
+        imshow(paths[i], fast_img);
+        
         waitKey(0);
         destroyAllWindows();
     }
-    /* Step 1 ends here */
 
-    /* Step 2: FAST feature detector */
+    
     
     
     return 0;
