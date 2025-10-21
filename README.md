@@ -1,5 +1,7 @@
 The idea of this project is to test a bit the OpenCV Library and also try to program it in a new programming language like C++, not MATLAB/Python
 
+Note: Did the same project in MATLAB and for own FAST detector, apparently the cpp one is more robust
+
 First steps:
 Learn how to install, run and build OpenCV: https://www.youtube.com/watch?v=CnXUTG9XYGI
 
