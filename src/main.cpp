@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <opencv2/opencv.hpp>
-#include <own_detectors.h>
+#include <fast_detector.h>
 
 using namespace std;
 using namespace cv;

@@ -1,0 +1,6 @@
+#ifdef HARRIS_CORNER_DETECTOR_H
+#define HARRIS_CORNER_DETECTOR_H
+
+
+
+#endif

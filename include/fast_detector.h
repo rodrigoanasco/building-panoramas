@@ -1,5 +1,5 @@
-#ifndef OWN_DETECTORS_H
-#define OWN_DETECTORS_H
+#ifndef FAST_DETECTOR_H
+#define FAST_DETECTOR_H
 
 #include <iostream>
 #include <opencv2/opencv.hpp>
