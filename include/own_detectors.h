@@ -48,12 +48,31 @@ POLARITY high_speed_test(Mat &image, Point &p, float threshold){
     return POLARITY::NONE; 
 };
 
+bool is_brighter(const Mat &image, const Point &p, float threshold, const Point *offsets){
+    int temp = 0;
+    float cvalue = image.at<float>(p.y, p.x);
+
+    for (int i = 0; i < 16; i++){
+        if (cvalue + threshold < image.at<float>(p + offsets[i])){
+            temp++;
+        }
+        else{
+            temp = 0;
+        }
+        if(temp >= 12) 
+            return true;
+    } 
+    return false;
+}
+
+
 vector<KeyPoint> my_fast_detector(const Mat image){
     
 
     /* first get the image and since it's normalized from input, we wont have to do it again*/
     Mat input;
     cvtColor(image, input, COLOR_BGR2GRAY);
+    input.convertTo(input, CV_32F, 1.0/255.0);
 
     /* now start with the padding */
     copyMakeBorder(input, input, 3, 3, 3, 3, BORDER_REFLECT_101);
@@ -102,9 +121,17 @@ vector<KeyPoint> my_fast_detector(const Mat image){
     I have to check if the brighter or darker points go in the same resulting matrix, if so, I can just process everything
     and put it in the same matrix and its fine
     */
-    for(int i = 3; i < image.rows - 3; i++){
-        for(int j = 3; j < image.cols - 3; j++){
-            //Here goes all the logic
+
+    /* resulting vector */
+    vector<KeyPoint> result;
+    for(int i = 3; i < input.rows - 3; i++){
+        for(int j = 3; j < input.cols - 3; j++){
+            Point current(j, i);
+            POLARITY temp = high_speed_test(input, current, threshold);
+            
+            if (temp == POLARITY::POS){
+                
+            }
         }
     }
 
