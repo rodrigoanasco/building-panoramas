@@ -103,7 +103,15 @@ vector<KeyPoint> my_fast_detector(const Mat image){
     copyMakeBorder(input, input, 3, 3, 3, 3, BORDER_REFLECT_101);
 
     // This will be the threshold to check the points in the image
-    float threshold = 0.1;
+    
+    /* Here I will make some notes about thresholds used:
+    0.1 = too many points in my opinon
+    0.4 = consistent but VERY few for some pictures
+    0.25 = very solid amound of points
+
+    still, remember that the real test is when you actually try to match the images together
+    */
+    float threshold = 0.25;
 
     // making the offsets for the padding
     // Point comes from cv library, it is just a regular Point structure
