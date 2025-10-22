@@ -29,8 +29,44 @@ Mat my_harris_corner_detector(Mat input){
 
     Mat sobelY = sobelX.t();
 
-    
+    Mat Ix, Iy;
 
+    // desired depth = desired data type, anchor point: Point(-1, -1) is "use the center automatically", 
+    // BORDER_DEFAULT reflects the border without repeating edge pixels in case there are not enough parameters to do our calculation (like in the left, right corner)
+    filter2D(image, Ix, CV_32F, sobelX, Point(-1, -1), 0, BORDER_DEFAULT);
+    filter2D(image, Iy, CV_32F, sobelY, Point(-1, -1), 0, BORDER_DEFAULT);
+
+    // Now we have to build second moments (for later in harris corner)
+    // And we also build our general gradient matrix Ixy (mul performs dot product)
+    Mat Ix2 = Ix.mul(Ix);
+    Mat Iy2 = Iy.mul(Iy);
+    Mat Ixy = Ix.mul(Iy);
+
+    // We will also apply the a gaussian blur to reduce the noise and make it more stable
+    Mat Sx2, Sy2, Sxy;
+    GaussianBlur(Ix2, Sx2, Size(5, 5), 1.0, 1.0, BORDER_DEFAULT);
+    GaussianBlur(Iy2, Sy2, Size(5, 5), 1.0, 1.0, BORDER_DEFAULT);
+    GaussianBlur(Ixy, Sxy, Size(5, 5), 1.0, 1.0, BORDER_DEFAULT);
+
+
+    // Now we calculate the Harris response
+    float k = 0.05;
+    Mat detM = Sx2.mul(Sy2) - Sxy.mul(Sxy);
+    Mat traceM = Sx2 + Sy2;
+    //trace is the sum of the squares of the main diagonal
+    Mat R = detM - k * traceM.mul(traceM);
+
+    // After computing R, the resulting values in R can vary a lot because these are not bounded, hence we should normalize it
+    double rmin, rmax;
+    minMaxLoc(R, &rmin, &rmax);
+    if (rmax > rmin) {
+        /* So what we do here is subtract rmin to everything so that the minimum value is 0, then we
+        divide it by rmax - rmin to normalize it */
+        R = (R - float(rmin)) / float(rmax - rmin);
+    }
+    else {
+        R.setTo(0);
+    }
 }
 
 
