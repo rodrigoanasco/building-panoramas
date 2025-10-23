@@ -61,15 +61,39 @@ Mat my_harris_corner_detector(Mat input){
         it is a second-moment matrix (not the same as the hessian) 
 
         After applying Sobel filters, you get two matrices which are the gradients in components, those are the
-        first moment matrices, you ^2 them and that describes how strong are horizontal
+        first moment matrices, you ^2 them and that describes the intensity, not the direction anymore, and
+        then you apply gaussian filter (remember gaussian filter is when you make a matrix with ones on the borders
+        (or the lowest value) and the highest value in the middle, and it works to normalize/blur essentially)
+
+        Sx2 = horizontal energy: It’s the average squared horizontal gradient in a neighborhood.
+        Measures how strongly the image changes left ↔ right in that area.
+        High Sx2 means strong horizontal contrast (vertical edges).
+        So it’s not a direction, it’s a magnitude (intensity) of horizontal variation.
+
+        Then, Sy2 is the vertical, it measures up and down and finally Sxy is the diagonals
+
+        Finally, they compose 
+        |S^2_x  S^2_xy|
+        |S^2_xy  S^2_y|
+        which is "how the intensity changes on average in both directions" and you apply it in a small region
 
         this matrix describes hwo intensity changs around a pixel, not just a pixel but in a local window
         this hessian matrix is always 2x2 
     */
+    
+    /* 
+    This is the determinant of the Harris matrix 
+    The determinant measures the “area” (or volume) spanned by the two gradient directions
+    measures how two-dimensional the local change is.
+    */
     Mat detM = Sx2.mul(Sy2) - Sxy.mul(Sxy);
 
     Mat traceM = Sx2 + Sy2;
-    //trace is the sum of the squares of the main diagonal
+    //trace is the sum of the squares of the main diagonal, How much energy is there overall?
+    // Determinant is the dimensionality of change (if it expands in only 1D or 2D)
+    // If it expands in 1D, it means that one direction is low, which means that there is only change from
+    // left to right for example, that makes it an edge. Otherwise, its more likely a corner because its
+    // spreading from the middle out, which means that all the sourroundings are different than it
     Mat R = detM - k * traceM.mul(traceM);
 
     // After computing R, the resulting values in R can vary a lot because these are not bounded, hence we should normalize it
