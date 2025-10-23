@@ -51,7 +51,19 @@ Mat my_harris_corner_detector(Mat input){
 
     // Now we calculate the Harris response
     float k = 0.05;
+    
+    /* This matrix is the determinant of the Harris matrix,
+        Harris matrix is composed by: 
+        |S^2_x  S^2_xy|
+        |S^2_xy  S^2_y|
+        And we already have those components calculated (S is from second moment)
+
+        it is a second-moment matrix (not the same as the hessian) 
+        this matrix describes hwo intensity changs around a pixel, not just a pixel but in a local window
+        this hessian matrix is always 2x2 
+    */
     Mat detM = Sx2.mul(Sy2) - Sxy.mul(Sxy);
+
     Mat traceM = Sx2 + Sy2;
     //trace is the sum of the squares of the main diagonal
     Mat R = detM - k * traceM.mul(traceM);
