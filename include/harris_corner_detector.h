@@ -59,6 +59,10 @@ Mat my_harris_corner_detector(Mat input){
         And we already have those components calculated (S is from second moment)
 
         it is a second-moment matrix (not the same as the hessian) 
+
+        After applying Sobel filters, you get two matrices which are the gradients in components, those are the
+        first moment matrices, you ^2 them and that describes how strong are horizontal
+
         this matrix describes hwo intensity changs around a pixel, not just a pixel but in a local window
         this hessian matrix is always 2x2 
     */
