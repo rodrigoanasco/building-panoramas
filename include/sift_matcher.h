@@ -100,11 +100,40 @@ void SIFT_matcher(const Mat im1, const Mat im2, vector<KeyPoint> kps1, vector<Ke
         }
     }
 
+    /* drawMatches is an opencv function that allows you to show the images side by side 
+        parameters:
+            im1: First image (left side of result)
+            kps1: Keypoints (features) from the first image
+            im2: Second image (right side of result)
+            kps2: Keypoints from the second image
+            good: The list of matches that you want to draw (DMatch vector)
+            vis: Output image
+            Scalar(0, 255, 0): Color of the lines
+            Scalar::all(-1): The color of the keypoint markers. -1 means "pick automatically"
+            vector<char>(): Optional mask (empty here)
+            DrawMatchesFlag::NOT_DRAW_SINGLE_POINTS: avoid drawing points that dont have a match
+    */
+    drawMatches(im1, kps1, im2, kps2, good, vis, Scalar(0, 255, 0), Scalar::all(-1), vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
+
+
+
+    /* Put text function:
+        This adds text on top of the visualization image
+        vis:            	    The image where you want to draw the text.
+        `winTitle + ":	        matches: " + to_string(good.size())`
+        Point(20,30):	        The pixel coordinates (x=20, y=30) where the text starts.
+        FONT_HERSHEY_SIMPLEX:	The font type (one of OpenCV’s built-in fonts).
+        0.8:	                The font scale — controls size.
+        Scalar(255,255,255):	The color (white in BGR).
+        2:      	            The thickness of the text.
+        LINE_AA:	            Anti-aliased edges, to make the text smoother.
     
+    */
+    putText(vis, title + "| matches" + to_string(good.size()), Point(20, 30), FONT_HERSHEY_SIMPLEX, 0.8, Scalar(255, 255, 255), 2, LINE_AA);
 
-
-
-
+    imshow(title, vis);
+    waitKey(0);
+    destroyWindow(title);
 }
 
 
