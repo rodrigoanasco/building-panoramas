@@ -4,6 +4,7 @@
 #include <opencv2/opencv.hpp>
 #include <fast_detector.h>
 #include <fastR_detector.h>
+#include <sift_matcher.h>
 
 using namespace std;
 using namespace cv;
@@ -84,12 +85,33 @@ int main(){
         hconcat(vector<Mat>{left, sep, right}, sideBySide);
         imshow("FAST vs FASTR", sideBySide);
         waitKey(0);
-
-        waitKey(0);
         destroyAllWindows();
+        
     }
 
+    /* Step 2: SIFT Matcher*/
+    //With Fast only
+    vector<KeyPoint> kps1 = my_fast_detector(images[0]);
+    vector<KeyPoint> kps2 = my_fast_detector(images[1]);
+    SIFT_matcher(images[0], images[1], kps1, kps2, "matching FAST ");
     
+    //With FASTR
+    vector<KeyPoint> Fkps1 = my_fastR_detector(images[0]);
+    vector<KeyPoint> Fkps2 = my_fastR_detector(images[1]);
+    SIFT_matcher(images[0], images[1], Fkps1, Fkps2, "matching FASTR");
+
+    
+    
+    //With Fast only
+    kps1 = my_fast_detector(images[10]);
+    kps2 = my_fast_detector(images[11]);
+    SIFT_matcher(images[10], images[11], kps1, kps2, "matching FAST ");
+    
+    //With FASTR
+    Fkps1 = my_fastR_detector(images[10]);
+    Fkps2 = my_fastR_detector(images[11]);
+    SIFT_matcher(images[10], images[11], Fkps1, Fkps2, "matching FASTR");
+
     
     
     return 0;
