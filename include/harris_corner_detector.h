@@ -67,6 +67,8 @@ Mat my_harris_corner_detector(Mat input){
     else {
         R.setTo(0);
     }
+
+    return R;
 }
 
 
