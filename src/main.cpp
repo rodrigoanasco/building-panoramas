@@ -63,8 +63,27 @@ int main(){
         drawKeypoints(images[i], fastR_kps, fastR_img, Scalar(255, 0, 0), DrawMatchesFlags::DEFAULT);
         
         
-        imshow("FAST" + paths[i], fast_img);
-        imshow("FASTR" + paths[i], fastR_img);
+        //Visualize both side to side:
+        Mat left = fast_img, right = fastR_img;
+
+        int height = max(left.rows, right.rows) - 20;
+        int wl = left.cols, wr = right.cols;
+
+        if (left.rows != height)  
+            resize(left,  left,  Size(wl * height / left.rows,  height));
+        if (right.rows != height) 
+            resize(right, right, Size(wr * height / right.rows, height));
+
+        putText(left,  "FAST",  {15, 30}, FONT_HERSHEY_SIMPLEX, 1.0, {0,255,0}, 2, LINE_AA);
+        putText(right, "FASTR", {15, 30}, FONT_HERSHEY_SIMPLEX, 1.0, {0,255,0}, 2, LINE_AA);
+        
+
+        Mat sep(height, 3, left.type(), Scalar(30,30,30));
+
+        Mat sideBySide;
+        hconcat(vector<Mat>{left, sep, right}, sideBySide);
+        imshow("FAST vs FASTR", sideBySide);
+        waitKey(0);
 
         waitKey(0);
         destroyAllWindows();
