@@ -3,6 +3,7 @@
 #include <vector>
 #include <opencv2/opencv.hpp>
 #include <fast_detector.h>
+#include <fastR_detector.h>
 
 using namespace std;
 using namespace cv;
@@ -49,15 +50,21 @@ int main(){
         
         /* Step 2: FAST feature detector */
         /* since the function is already created in "own_functions.h" just call it*/
-        vector<KeyPoint> kps = my_fast_detector(images[i]);
+        vector<KeyPoint> fast_kps = my_fast_detector(images[i]);
+        vector<KeyPoint> fastR_kps = my_fastR_detector(images[i]);
+        
+
         // Now to overlay it, we can simply use the function:
-        Mat fast_img;
+        Mat fast_img, fastR_img;
         // parameters: image, keypoints, output, points_color, if you want to draw the points over the image
         // NOTE: 'DRAW_OVER_OUTIM' was giving me an error because it overwrites the image that was contained already in "fast_img"
         // However, since fast_img is empty rn, it gives an error. Be careful about this (changed it to default that actually creates a new image with the points)
-        drawKeypoints(images[i], kps, fast_img, Scalar(0, 255, 0), DrawMatchesFlags::DEFAULT);
+        drawKeypoints(images[i], fast_kps, fast_img, Scalar(0, 255, 0), DrawMatchesFlags::DEFAULT);
+        drawKeypoints(images[i], fastR_kps, fastR_img, Scalar(255, 0, 0), DrawMatchesFlags::DEFAULT);
         
-        imshow(paths[i], fast_img);
+        
+        imshow("FAST" + paths[i], fast_img);
+        imshow("FASTR" + paths[i], fastR_img);
 
         waitKey(0);
         destroyAllWindows();
