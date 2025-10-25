@@ -5,6 +5,7 @@
 #include <fast_detector.h>
 #include <fastR_detector.h>
 #include <sift_matcher.h>
+#include <ransac.h>
 
 using namespace std;
 using namespace cv;
@@ -113,6 +114,23 @@ int main(){
     SIFT_matcher(images[10], images[11], Fkps1, Fkps2, "matching FASTR");
 
     
-    
+    /* Last Step: Actually build the panoramas */
+    RansacParameters P;
+    P.confidence  = 0.995;
+    P.maxIters    = 2000;
+    P.maxDistance = 3.0;
+    P.ratio       = 0.80f;
+
+    Mat panoFast  = panorama_FAST(images[10], images[11], P);
+    Mat panoFastR = panorama_FASTR(images[10], images[11], P);
+
+    if (!panoFast.empty())  
+        imshow("Panorama FAST",  panoFast);
+    if (!panoFastR.empty()) 
+        imshow("Panorama FASTR", panoFastR);
+    waitKey(0);
+
+
+
     return 0;
 }

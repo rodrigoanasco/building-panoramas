@@ -33,7 +33,7 @@ vector<KeyPoint> my_fastR_detector(const Mat input){
     H = my_harris_corner_detector(image);
 
     vector<KeyPoint> result;
-    float threshold = 0.4;
+    float threshold = 0.35;
     for (int i = 0; i < temp.size(); i++){
         int x = cvRound(temp[i].pt.x);
         int y = cvRound(temp[i].pt.y);
