@@ -4,11 +4,12 @@
       "name": "WSL",
       "includePath": [
         "${workspaceFolder}/**",
-        "/usr/local/include/opencv4"
+        "/usr/include/opencv4"
       ],
       "compilerPath": "/usr/bin/g++",
       "cppStandard": "c++17",
-      "cStandard": "c17"
+      "cStandard": "c17",
+      "intelliSenseMode": "linux-gcc-x64"
     }
   ],
   "version": 4

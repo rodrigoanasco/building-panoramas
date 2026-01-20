@@ -130,6 +130,12 @@ int main(){
         imshow("Panorama FASTR", panoFastR);
     waitKey(0);
 
+    panoFast = panorama_FAST(images[3], images[4], P);
+    Mat panoFast2 = panorama_FAST(panoFast, images[5], P);
+    panoFast = panorama_FAST(panoFast2, images[6], P);
+
+    if (!panoFast.empty())  
+        imshow("Panorama FAST",  panoFast);
 
 
     return 0;
